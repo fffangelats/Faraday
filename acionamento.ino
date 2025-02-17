@@ -1,7 +1,7 @@
 #define delayRTDS 3000
 #define totalBreak ??? 
 
-/* Código arduino Faraday Racing - 2018
+/* Código arduino Faraday Racing - 2025
  * 
  * 
  *  
