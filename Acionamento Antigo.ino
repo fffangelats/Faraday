@@ -1,4 +1,6 @@
-/* Cédigo arduino Faraday Racing - 2018
+#define delayRTDS 3000
+
+/* Código arduino Faraday Racing - 2018
  * 
  * 
  *  
@@ -8,44 +10,35 @@
 
 // PINOS
 // Analogico
-const int pinAcel1    = A4;                                  
-const int pinAcel2    = A3;
-const int pinCorrente = A0;            
-const int pinFreio    = A5;                                       //testar assim que tiver montada
+const int pinAcel1  = A4;                                  
+const int pinAcel2  = A3;        
+const int pinFreio  = A5;                                       //testar assim que tiver montada
 
 // Digital
 const int pinRTD = 5;                                             // Pino de entrada do sinal RTD
 const int pinFBair = 13;                                          // Pino de entrada do sinal do feedback AIR
-const int pinSirene = 12;                                          // Pino Sirene
+const int pinRTDS = 12;                                           // Pino Sirene
 const int pinShtd = 11;                                           // Pino comando Relé de shutdown                                * 
 const int pinSeatswitch = 4;                                      // Pino de saida do Seatswitch 
 const int pinFootswitch = 2;                                      // Pino de saida do Footswitch
 const int pinLedRTD = 7;                                          // Pino da led RTD  
-const int pinLedShtd = 8;                                         // Pino led Shutdown
-const int pinMotor    = 3;                                        // Pino do sinal PWM do motor
-const int pinErroIMD = 9;                                         //Pino de Entrada que recebe o sinall de erro do IMD.
+//const int pinLedShtd = 8;                                         // Pino led Shutdown
+                                                                  // Pino do sinal PWM do motor
+                                                                  //Pino de Entrada que recebe o sinall de erro do IMD.
 
 
 // Variáveis de input e output 
-int acel1   = 0;                                                  // Variável Acelerador1 (0~100%)
-int acel2   = 0;                                                  // Variável Acelerador2 (0~100%)
-int motor   = 0;                                                  // variavel PWM pro motor
-int shtdout = 0;                                                  // Variável de indicação de Shutdown externo
+int APPS1   = 0;                                                  // Variável Acelerador1 (0~100%)
+int APPS2   = 0;                                                  // Variável Acelerador2 (0~100%)                                                // variavel PWM pro motor
+//int shtdout = 0;                                                  // Variável de indicação de Shutdown externo
 int diferenca = 0;                                                // Variavel que ve a diferenca de Acel1 e Acel2
 int freio = 0;                                                    // Variavel freio
-int estadoBrk = 0;                                                // Variavel com valor do freio
-int IMD = 0;
-int corrente =0;
+
 
 
 // Variáveis de limite
 
-const int delaySirene = 3000; // Tempo em que a sirene fica ligado (milissegundos)
-const int limitefreioSeat = 125; // valor do freio que precisa esta ativo 100~220 (medição Tav).
-const int limDeltaAC = 25; //Limite permitido entre a diferença de leitura entre Acel1 e Acel2 10% de 255
-const int limAcMax = 60;  // valor limite que acel1 junto com o freio acionado 0~255
-const int limAcMin = 25; //valor minimo para acel1 liberar o shutdown
-const int limitefreio = limitefreioSeat; //declara que o limite do freio e 125 de 100~220
+//const int limitefreioSeat = 125; // valor do freio que precisa esta ativo 100~220 (medição Tav).
 
 
 // Variáveis de estado
@@ -55,18 +48,15 @@ boolean shtdE = 0;                  // estado do sht Externo
 boolean shtd = 0;                   // Variável de controle do shutdown
 
 // Variáveis de tempo
-unsigned long hora;
+unsigned long tempo{0};
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void setup() 
 {
-  pinMode (pinRTD         ,INPUT);
-  pinMode (pinFBair       ,INPUT);
-  pinMode (pinErroIMD     ,INPUT);
-  
-  
-  pinMode (pinSirene         ,OUTPUT);
+  //pinMode (pinRTD         ,INPUT);
+  //pinMode (pinFBair       ,INPUT);
+  pinMode (pinRTDS         ,OUTPUT);
   pinMode (pinShtd           ,OUTPUT);
   pinMode (pinSeatswitch     ,OUTPUT);
   pinMode (pinFootswitch     ,OUTPUT);
@@ -74,6 +64,8 @@ void setup()
   pinMode (pinLedShtd        ,OUTPUT);
 
   Serial.begin(9600);                               //inicia o envio de dados pela porta serial a 9600 bits/s
+
+  
 
 }
 
