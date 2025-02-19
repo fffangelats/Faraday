@@ -1,5 +1,17 @@
-#define delayRTDS 3000
-#define totalBreak ??? 
+ // Pinos Analogicos
+#define pinAPPS1 A4                                  
+#define pinAPPS2 A3        
+#define pinBrake A5                                    
+
+//Pinos Digitais
+#define pinRTD 5                                             // Pino de entrada do sinal RTD
+#define pinFBair 13                                          // Pino de entrada do sinal do feedback AIR
+#define pinRTDS 12                                           // Pino Sirene
+#define pinShtd 11                                           // Pino comando Relé de shutdown                                * 
+#define pinSeatswitch 4                                      // Pino de saida do Seatswitch 
+#define pinFootswitch 2                                      // Pino de saida do Footswitch
+#define pinLedRTD 7                                           // Pino da led RTD
+//#define pinLedShtd 8                                         // Pino led Shutdown
 
 /* Código arduino Faraday Racing - 2025
  * 
@@ -9,28 +21,10 @@
  * 
  */
 
-// PINOS
-// Analogico
-const int pinAPPS1 = A4;                                  
-const int pinAPPS2  = A3;        
-const int pinBrake  = A5;                                       //testar assim que tiver montada
-
-// Digital
-const int pinRTD = 5;                                             // Pino de entrada do sinal RTD
-const int pinFBair = 13;                                          // Pino de entrada do sinal do feedback AIR
-const int pinRTDS = 12;                                           // Pino Sirene
-const int pinShtd = 11;                                           // Pino comando Relé de shutdown                                * 
-const int pinSeatswitch = 4;                                      // Pino de saida do Seatswitch 
-const int pinFootswitch = 2;                                      // Pino de saida do Footswitch
-const int pinLedRTD = 7;                                           // Pino da led RTD
-//const int pinLedShtd = 8;                                         // Pino led Shutdown
-                                                                  // Pino do sinal PWM do motor
-                                                                  //Pino de Entrada que recebe o sinall de erro do IMD.
-
 
 // Variáveis de input e output 
 int APPS1   = 0;                                                  // Variável Acelerador1 (0~100%)
-int APPS2   = 0;                                                  // Variável Acelerador2 (0~100%)                                                // variavel PWM pro motor
+int APPS2   = 0;                                                  // Variável Acelerador2 (0~100%)                                             
 //int shtdout = 0;                                                  // Variável de indicação de Shutdown externo
 int diferenca = 0;                                                // Variavel que ve a diferenca de Acel1 e Acel2
 int brake = 0;                                                    // Variavel freio
@@ -38,6 +32,8 @@ int brake = 0;                                                    // Variavel fr
 
 
 // Variáveis de limite
+const int delayRTDS 3000
+//const int totalBreak ???
 
 //const int limitefreioSeat = 125; // valor do freio que precisa esta ativo 100~220 (medição Tav).
 
