@@ -11,6 +11,7 @@
 #define pinSeatswitch 4                                      // Pino de saida do Seatswitch 
 #define pinFootswitch 2                                      // Pino de saida do Footswitch
 #define pinLedRTD 7                                           // Pino da led RTD
+#define pinRAPPS 6                                            //pino Relé APPS Inversor
 //#define pinLedShtd 8                                         // Pino led Shutdown
 
 /* Código arduino Faraday Racing - 2025
@@ -53,6 +54,7 @@ void setup()
 {
   //pinMode (pinRTD         ,INPUT);
   //pinMode (pinFBair       ,INPUT);
+  pinMode (pinRAPPS        ,OUTPUT);
   pinMode (pinRTDS         ,OUTPUT);
   pinMode (pinShtd           ,OUTPUT);
   pinMode (pinSeatswitch     ,OUTPUT);
