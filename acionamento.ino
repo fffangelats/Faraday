@@ -50,6 +50,13 @@ unsigned long tempo{0};
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+void ImplausabilidadeAPPS(int input1,int input2)
+{ 
+  
+ 
+}
+
+
 void setup() 
 {
   //pinMode (pinRTD         ,INPUT);
@@ -71,8 +78,12 @@ void setup()
 void loop()
 {
 if(estadoRTD){
-      
-  
+ digitalWrite(pinRAPPS, HIGH);   
+ APPS1 = analogRead(pinAPPS2);
+ APPS2 = analogRead(pinAPPS1); 
+ ImplausabilidadeAPPS(input1,input2);
+ delay(100);
+ 
 }  
 else{
     feedbackAIR = digitalRead(pinFBair);              // Lê estado do feedback AIR
