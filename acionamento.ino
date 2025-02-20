@@ -50,11 +50,18 @@ unsigned long tempo{0};
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-void ImplausabilidadeAPPS(int input1,int input2)
-{ 
-  
- 
-}
+void ImplausabilidadeAPPS(int input1,int input2){
+  int count;
+  float diff = (input1 - input2);
+  if (abs(diff/input1) < 0.1){
+  count = 0;
+  }
+  else{
+  count++;  
+  	if (count > 2 ){
+  	digitalWrite(pinRAPPS, LOW);	}
+  } 
+}  
 
 
 void setup() 
@@ -81,7 +88,7 @@ if(estadoRTD){
  digitalWrite(pinRAPPS, HIGH);   
  APPS1 = analogRead(pinAPPS2);
  APPS2 = analogRead(pinAPPS1); 
- ImplausabilidadeAPPS(input1,input2);
+ ImplausabilidadeAPPS(APPS1,APPS2);
  delay(100);
  
 }  
