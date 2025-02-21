@@ -27,7 +27,6 @@
 int APPS1   = 0;                                                  // Variável Acelerador1 (0~100%)
 int APPS2   = 0;                                                  // Variável Acelerador2 (0~100%)                                             
 //int shtdout = 0;                                                  // Variável de indicação de Shutdown externo
-int diferenca = 0;                                                // Variavel que ve a diferenca de Acel1 e Acel2
 int brake = 0;                                                    // Variavel freio
 
 
@@ -63,6 +62,11 @@ void ImplausabilidadeAPPS(int input1,int input2){
   } 
 }  
 
+void ImplausabilidadeBSE(int input){
+}  
+
+
+
 
 void setup() 
 {
@@ -89,6 +93,8 @@ if(estadoRTD){
  APPS1 = analogRead(pinAPPS2);
  APPS2 = analogRead(pinAPPS1); 
  ImplausabilidadeAPPS(APPS1,APPS2);
+ brake = analogRead(brake);
+ ImplausabilidadeBSE();
  delay(100);
  
 }  
