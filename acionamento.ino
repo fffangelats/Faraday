@@ -58,7 +58,9 @@ void ImplausabilidadeAPPS(int input1,int input2){
   else{
   count++;  
   	if (count > 2 ){
-  	digitalWrite(pinRAPPS, LOW);	}
+  	digitalWrite(pinRAPPS, LOW);
+   estadoRTD = False;
+   }
   } 
 }  
 
