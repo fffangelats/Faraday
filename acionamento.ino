@@ -31,6 +31,7 @@
 // Variáveis de input e output 
 int APPS1   = 0;                                                  // Variável Acelerador1 (0~100%)
 int APPS2   = 0;                                                  // Variável Acelerador2 (0~100%)                                             
+int SOC = 0;
 //int shtdout = 0;                                                  // Variável de indicação de Shutdown externo
 int brake = 0;                                                    // Variavel freio
 
@@ -53,6 +54,7 @@ boolean shtd = 0;                   // Variável de controle do shutdown
 unsigned long tempo{0};
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 void ImplausabilidadeAPPS(int input1,int input2){
   int count;
@@ -111,6 +113,8 @@ if(estadoRTD){
  digitalWrite(pinRAPPS, HIGH);   
  APPS1 = analogRead(pinAPPS2);
  APPS2 = analogRead(pinAPPS1); 
+ SOC = analogRead
+
  ImplausabilidadeAPPS(APPS1,APPS2);
  brake = analogRead(brake);
  ImplausabilidadeBSE();
