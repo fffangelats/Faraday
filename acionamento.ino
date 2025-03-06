@@ -11,7 +11,11 @@
 #define pinSeatswitch 4                                      // Pino de saida do Seatswitch 
 #define pinFootswitch 2                                      // Pino de saida do Footswitch
 #define pinLedRTD 7                                           // Pino da led RTD
-#define pinRAPPS 6                                            //pino Relé APPS Inversor
+#define pinRAPPS 6  
+#define pinBMSFault 9
+#define pinIMDFault 10 
+
+//pino Relé APPS Inversor
 //#define pinLedShtd 8                                         // Pino led Shutdown
 
 /* Código arduino Faraday Racing - 2025
@@ -51,7 +55,7 @@ unsigned long tempo{0};
 
 void ImplausabilidadeAPPS(int input1,int input2){
   int count;
-  float diff = (input1 - input2);
+  float diff = (input1 + input2);
   if (abs(diff/input1) < 0.1){
   count = 0;
   }
@@ -64,7 +68,19 @@ void ImplausabilidadeAPPS(int input1,int input2){
   } 
 }  
 
-void ImplausabilidadeBSE(int input){
+void ImplausabilidadeBSE(int input1, int input 2){
+int count;
+  float diff = (input1 + input2);
+  if (abs(diff/input1) < 0.1){
+  count = 0;
+  }
+  else{
+  count++;  
+  	if (count > 2 ){
+  	digitalWrite(pinRAPPS, LOW);
+   estadoRTD = False;
+   }
+  } 
 }  
 
 
