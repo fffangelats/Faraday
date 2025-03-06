@@ -8,8 +8,9 @@
 #define pinFBair 13                                          // Pino de entrada do sinal do feedback AIR
 #define pinRTDS 12                                           // Pino Sirene
 #define pinShtd 11                                           // Pino comando Relé de shutdown                                * 
-#define pinSeatswitch 4                                      // Pino de saida do Seatswitch 
-#define pinFootswitch 2                                      // Pino de saida do Footswitch
+#define pinRSeatswitch 4                                      // Pino de saida do Seatswitch 
+#define pinRFootswitch 2                   // Pino de saida do Footswitch
+#define pinRAPPS 
 #define pinLedRTD 7                                           // Pino da led RTD
 #define pinRAPPS 6  
 #define pinBMSFault 9
