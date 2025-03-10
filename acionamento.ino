@@ -1,7 +1,8 @@
  // Pinos Analogicos
 #define pinAPPS1 A4                                  
 #define pinAPPS2 A3        
-#define pinBrake A5                                    
+#define pinBrake A5
+#define pinBMS A2
 
 //Pinos Digitais
 #define pinRTD 5                                             // Pino de entrada do sinal RTD
@@ -10,7 +11,6 @@
 #define pinShtd 11                                           // Pino comando Relé de shutdown                                * 
 #define pinRSeatswitch 4                                      // Pino de saida do Seatswitch 
 #define pinRFootswitch 2                   // Pino de saida do Footswitch
-#define pinRAPPS 
 #define pinLedRTD 7                                           // Pino da led RTD
 #define pinRAPPS 6  
 #define pinBMSFault 9
@@ -66,25 +66,37 @@ void ImplausabilidadeAPPS(int input1,int input2){
   count++;  
   	if (count > 2 ){
   	digitalWrite(pinRAPPS, LOW);
+   digitalWrite(RFootswitch, LOW);
    estadoRTD = False;
    }
   } 
 }  
 
-void ImplausabilidadeBSE(int input1, int input 2){
+void ImplausabilidadeBSE(int input1){
 int count;
-  float diff = (input1 + input2);
-  if (abs(diff/input1) < 0.1){
-  count = 0;
-  }
-  else{
-  count++;  
-  	if (count > 2 ){
-  	digitalWrite(pinRAPPS, LOW);
-   estadoRTD = False;
+if (input1 > 0 || input1 < 5){
+count = 0;
+}
+else {
+count++; 
+if (count > 2 ){
+ 	digitalWrite(pinRAPPS, LOW);
+  digitalWrite(RFootswitch, LOW);
+  estadoRTD = False;
    }
-  } 
+ }
 }  
+
+void Shutdown(){
+
+ 
+}
+
+}
+
+
+
+
 
 
 
@@ -96,8 +108,8 @@ void setup()
   pinMode (pinRAPPS        ,OUTPUT);
   pinMode (pinRTDS         ,OUTPUT);
   pinMode (pinShtd           ,OUTPUT);
-  pinMode (pinSeatswitch     ,OUTPUT);
-  pinMode (pinFootswitch     ,OUTPUT);
+  pinMode (pinRSeatswitch     ,OUTPUT);
+  pinMode (pinRFootswitch     ,OUTPUT);
   pinMode (pinLedRTD         ,OUTPUT);
   pinMode (pinLedShtd        ,OUTPUT);
 
@@ -111,13 +123,18 @@ void loop()
 {
 if(estadoRTD){
  digitalWrite(pinRAPPS, HIGH);   
+
  APPS1 = analogRead(pinAPPS2);
  APPS2 = analogRead(pinAPPS1); 
- SOC = analogRead
-
  ImplausabilidadeAPPS(APPS1,APPS2);
+ 
  brake = analogRead(brake);
- ImplausabilidadeBSE();
+ ImplausabilidadeBSE(brake);
+
+ SOC = analogRead(pinBMS);
+ 
+
+ 
  delay(100);
  
 }  
