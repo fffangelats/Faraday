@@ -32,8 +32,8 @@
 // Variáveis de input e output 
 int APPS1   = 0;                                                  // Variável Acelerador1 (0~100%)
 int APPS2   = 0;                                                  // Variável Acelerador2 (0~100%)                                             
+int Freq = 0;
 int SOC = 0;
-//int shtdout = 0;                                                  // Variável de indicação de Shutdown externo
 int brake = 0;                                                    // Variavel freio
 
 
@@ -48,7 +48,6 @@ const int delayRTDS 3000
 // Variáveis de estado
 boolean feedbackAIR = 0;            // estado do FeedBack AIR
 boolean estadoRTD = 0;              // estado do RTD
-boolean shtdE = 0;                  // estado do sht Externo
 boolean shtd = 0;                   // Variável de controle do shutdown
 
 // Variáveis de tempo
@@ -67,7 +66,7 @@ void ImplausabilidadeAPPS(int input1,int input2){
   count++;  
   	if (count > 2 ){
   	digitalWrite(pinRAPPS, LOW);
-   digitalWrite(RFootswitch, LOW);
+   digitalWrite(RSeatswitch, LOW);
    estadoRTD = False;
    }
   } 
@@ -82,15 +81,19 @@ else {
 count++; 
 if (count > 2 ){
  	digitalWrite(pinRAPPS, LOW);
-  digitalWrite(RFootswitch, LOW);
+  digitalWrite(RSeatswitch, LOW);
   estadoRTD = False;
    }
  }
 }  
 
 void Shutdown(){
-
- 
+feedbackAIR = false; 
+digitalWrite(pinFootswitch, LOW);   
+digitalWrite(pinSeatswitch, LOW);  
+digitalWrite(pinRAPPS, LOW);
+shtd = True;
+estadoRTD = False;
 }
 
 }
@@ -139,7 +142,7 @@ if(estadoRTD){
  }
 
  if(digitalRead(pinIMDfault)){
-   analogRead(pinIMDfreq)
+   Freq = analogRead(pinIMDfreq)
    Shutdown();
  }
  
