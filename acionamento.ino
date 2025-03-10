@@ -3,6 +3,7 @@
 #define pinAPPS2 A3        
 #define pinBrake A5
 #define pinBMS A2
+#define pinIMDfreq A1
 
 //Pinos Digitais
 #define pinRTD 5                                             // Pino de entrada do sinal RTD
@@ -132,8 +133,16 @@ if(estadoRTD){
  ImplausabilidadeBSE(brake);
 
  SOC = analogRead(pinBMS);
- 
 
+ if(digitalRead(pinBMSfault)){
+   Shutdown();
+ }
+
+ if(digitalRead(pinIMDfault)){
+   analogRead(pinIMDfreq)
+   Shutdown();
+ }
+ 
  
  delay(100);
  
