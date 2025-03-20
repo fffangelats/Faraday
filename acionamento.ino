@@ -17,6 +17,9 @@
 #define pinBMSFault 9
 #define pinIMDFault 10 
 
+//Variáveis de Limite 
+#define delayRTDS 3000
+
 //pino Relé APPS Inversor
 //#define pinLedShtd 8                                         // Pino led Shutdown
 
@@ -34,12 +37,11 @@ int APPS1   = 0;                                                  // Variável A
 int APPS2   = 0;                                                  // Variável Acelerador2 (0~100%)                                             
 int Freq = 0;
 int SOC = 0;
-int brake = 0;                                                    // Variavel freio
+int Brake = 0;                                                    // Variavel freio
 
 
 
-// Variáveis de limite
-const int delayRTDS 3000
+
 //const int totalBreak ???
 
 //const int limitefreioSeat = 125; // valor do freio que precisa esta ativo 100~220 (medição Tav).
