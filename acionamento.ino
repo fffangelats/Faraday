@@ -1,24 +1,27 @@
  // Pinos Analogicos
-#define pinAPPS1 A4                                  
-#define pinAPPS2 A3        
-#define pinBrake A5
-#define pinBMS A2
-#define pinIMDfreq A1
+#define pinAPPS1 PBA0                                  
+#define pinAPPS2 PBA2        
+#define pinBSE1 PBA1
+#define pinBSE2 PBA3
+#define pinSOCBMS ??
+#define pinMHSSTA PB15  //Frequência de erro do IMD
 
 //Pinos Digitais
-#define pinRTD 5                                             // Pino de entrada do sinal RTD
-#define pinFBair 13                                          // Pino de entrada do sinal do feedback AIR
-#define pinRTDS 12                                           // Pino Sirene
-#define pinShtd 11                                           // Pino comando Relé de shutdown                                * 
-#define pinRSeatswitch 4                                      // Pino de saida do Seatswitch 
-#define pinRFootswitch 2                   // Pino de saida do Footswitch
-#define pinLedRTD 7                                           // Pino da led RTD
-#define pinRAPPS 6  
-#define pinBMSFault 9
-#define pinIMDFault 10 
+#define TSSIR PB8
+#define TSSIG PB9
+#define pinRTD PB11                  // Pino de entrada do sinal RTD
+#define pinFBair                     // Pino de entrada do sinal do feedback AIR
+#define pinRTDS PB4                  // Pino Sirene 
+#define pinSDR PB10                 // Pino comando Relé de shutdown                                                         * 
+#define pinSDS PB14                  // Pino de saida do Seatswitch 
+#define pinSDF PB13                  // Pino de saida do Footswitch                                          
+#define pinSDA PB12
+#define pinBMSFault ??
+#define pinIMDFault PB7
 
 //Variáveis de Limite 
 #define delayRTDS 3000
+
 
 //pino Relé APPS Inversor
 //#define pinLedShtd 8                                         // Pino led Shutdown
@@ -33,11 +36,13 @@
 
 
 // Variáveis de input e output 
-int APPS1   = 0;                                                  // Variável Acelerador1 (0~100%)
-int APPS2   = 0;                                                  // Variável Acelerador2 (0~100%)                                             
-int Freq = 0;
-int SOC = 0;
-int Brake = 0;                                                    // Variavel freio
+int APPS1{0};                                                  // Variável Acelerador1 (0~100%)
+int APPS2{0};                                                  // Variável Acelerador2 (0~100%)                                             
+int Freq{0};
+int SOC{0};
+int BSE1{0};   
+int BSE2{0};
+unsigned int Tempo{0}; // Variavel freio
 
 
 
@@ -52,42 +57,8 @@ boolean feedbackAIR = 0;            // estado do FeedBack AIR
 boolean estadoRTD = 0;              // estado do RTD
 boolean shtd = 0;                   // Variável de controle do shutdown
 
-// Variáveis de tempo
-unsigned long tempo{0};
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-void ImplausabilidadeAPPS(int input1,int input2){
-  int count;
-  float diff = (input1 + input2);
-  if (abs(diff/input1) < 0.1){
-  count = 0;
-  }
-  else{
-  count++;  
-  	if (count > 2 ){
-  	digitalWrite(pinRAPPS, LOW);
-   digitalWrite(RSeatswitch, LOW);
-   estadoRTD = False;
-   }
-  } 
-}  
-
-void ImplausabilidadeBSE(int input1){
-int count;
-if (input1 > 0 || input1 < 5){
-count = 0;
-}
-else {
-count++; 
-if (count > 2 ){
- 	digitalWrite(pinRAPPS, LOW);
-  digitalWrite(RSeatswitch, LOW);
-  estadoRTD = False;
-   }
- }
-}  
 
 void Shutdown(){
 feedbackAIR = false; 
@@ -98,6 +69,20 @@ shtd = True;
 estadoRTD = False;
 }
 
+void ImplausabilidadeAPPS(int input1,int input2, unsigned int tempo){
+  int timer;
+  float diff = (input1 + input2);
+  if (abs(diff/input1) > 0.1){
+  timer = tempo;
+  if (timer > 100){
+  Shutdown();
+  }}
+  else {
+  timer = 0;
+  }
+  
+
+void ImplausabilidadeBSE(int input1, int input2, unsigned int tempo){
 }
 
 
@@ -109,15 +94,14 @@ estadoRTD = False;
 
 void setup() 
 {
-  //pinMode (pinRTD         ,INPUT);
-  //pinMode (pinFBair       ,INPUT);
-  pinMode (pinRAPPS        ,OUTPUT);
+  pinMode (pinRTD         ,INPUT);
+  pinMode (pinFBair       ,INPUT);
+  pinMode (pinSDA        ,OUTPUT);
   pinMode (pinRTDS         ,OUTPUT);
-  pinMode (pinShtd           ,OUTPUT);
-  pinMode (pinRSeatswitch     ,OUTPUT);
-  pinMode (pinRFootswitch     ,OUTPUT);
-  pinMode (pinLedRTD         ,OUTPUT);
-  pinMode (pinLedShtd        ,OUTPUT);
+  pinMode (pinSDR           ,OUTPUT);
+  pinMode (pinSDS    ,OUTPUT);
+  pinMode (pinSDF     ,OUTPUT);
+
 
   Serial.begin(9600);                               //inicia o envio de dados pela porta serial a 9600 bits/s
 
@@ -127,6 +111,8 @@ void setup()
 
 void loop()
 {
+Tempo = HAL_GetTick();
+
 if(estadoRTD){
  digitalWrite(pinRAPPS, HIGH);   
 
@@ -144,26 +130,25 @@ if(estadoRTD){
  }
 
  if(digitalRead(pinIMDfault)){
-   Freq = analogRead(pinIMDfreq)
+   Freq = analogRead(pinMHSSTA);
    Shutdown();
  }
  
  
- delay(100);
+ delay(taxaA);
  
 }  
 else{
-    feedbackAIR = digitalRead(pinFBair);              // Lê estado do feedback AIR
+    feedbackAIR = digitalRead(pinFBair);              // Lê estado do feedback AIR, ou seja, o HV está ativado
     if(feedbackAIR == True)                           // Se feedbackAIR estiver ligado vai entrar no if
     {
-      brake = analogRead(pinFreio);                  // Lê se o freio esta acionado ou não
-      digitalWrite(pinSeatswitch, HIGH);              // fecha a seatswitch
-      if(brake >= totalBrake && digitalRead(pinRTD) ){
-        digitalWrite(pinFootswitch, HIGH);            // fecha o footswitch
-        digitalWrite(pinRTDS, HIGH);                  // Liga a Sirene
-        digitalWrite(pinLedRTD, HIGH);                // Acende o LED do RTD
+      BSE1 = analogRead(pinBSE1);                  // Lê se o freio esta acionado ou não
+      digitalWrite(pinSDF, HIGH);              // fecha a seatswitch
+      if(BSE1 >= totalBrake && digitalRead(pinRTD) ){
+        digitalWrite(pinSDS, HIGH);            // fecha o footswitch
+        digitalWrite(pinRTDS, HIGH);                  // Liga a Sirene             // Acende o LED do RTD
         delay(delaySirene);
-        digitalWrite(pinSirene, LOW);                 // Desliga Sirene   
+        digitalWrite(pinRTDS, LOW);                 // Desliga Sirene   
         estadoRTD = True;
       };               
     }}      
